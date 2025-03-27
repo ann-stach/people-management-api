@@ -1,27 +1,35 @@
-# people-management-api
-Built with Spring Boot 3, the system manages various person types and enables flexible searching via Criteria API. It ensures secure access with Spring Security and versioned DB migrations using Liquibase. The Facade pattern enhances flexibility, allowing extensions without modifying existing code. Designed for scalability and concurrency safety.
+# People Management API
 
+Built with **Spring Boot 3**, this system provides management for different types of people (e.g., employees, students, retirees). It allows flexible searching through the use of the **Criteria API**, ensures secure access with **Spring Security**, and supports versioned database migrations with **Liquibase**. The **Facade pattern** ensures flexibility, simplifying future extensions without modifying existing code. The system is designed for **scalability** and **concurrency safety**.
 
-System zarządzania osobami to aplikacja webowa oparta na Spring Boot 3, umożliwiająca przechowywanie i wyszukiwanie danych różnych typów osób, takich jak pracownicy, studenci i emeryci. System oferuje pojedynczy, uniwersalny endpoint do pobierania osób według różnych kryteriów, obsługując paginację oraz filtrowanie po numerze PESEL, imieniu, nazwisku, wieku, wzroście, wadze i innych specyficznych parametrach, które zostało zaimplementowane z wykorzystaniem Criteria API. Dodawanie nowych typów osób nie wymaga modyfikacji istniejących klas, a walidacja oraz obsługa błędów zapewniają poprawność danych. Edycja osoby obsługuje mechanizm optymistycznej blokady, chroniąc przed problemami współbieżności i "missing update". System umożliwia zarządzanie stanowiskami pracowników, zapobiegając nakładaniu się dat zatrudnienia. Dodatkowo, aplikacja obsługuje asynchroniczny import danych z plików CSV o dużej objętości, działając w sposób transakcyjny i wydajny (min. 50 tys. insertów/s dla H2), a do kolejkowania importu wykorzystuje Redis.
+---
 
-Aby zapewnić maksymalną elastyczność i łatwą rozszerzalność systemu w przyszłości, wykorzystano wzorzec fasady, który upraszcza interakcję z modułami aplikacji i umożliwia ich łatwe rozwijanie. Dodatkowo, do zarządzania migracjami bazy danych użyto Liquibase, co pozwala na kontrolowane i wersjonowane zmiany w schemacie danych. Zabezpieczenia aplikacji są oparte na Spring Security, kontrolując dostęp do funkcji systemu. System został zaprojektowany do pracy w środowisku skalowalnym i wieloinstancyjnym, zapewniając odporność na problemy współbieżności.
+## System Overview
 
------------------------------------------------------------------------------------
-        @RequestBody do filtrowania:   @PostMapping("/search")
------------------------------------------------------------------------------------
+This **people management system** is a web application built on **Spring Boot 3**. It allows for the storage and search of various person types, such as employees, students, and retirees. The system provides a single, universal endpoint for fetching people based on different criteria, supporting pagination and filtering by **PESEL number**, name, surname, age, height, weight, and other specific parameters. This functionality is implemented using **Criteria API**. The system ensures that adding new person types doesn't require modifying existing classes, and it provides validation and error handling to ensure data integrity. Editing a person supports **optimistic locking** to protect against concurrency issues and "missing updates". It also supports managing **employee positions**, preventing overlaps in employment dates. The application handles **asynchronous data import** from large CSV files efficiently, with a transactional approach, enabling up to **50,000 inserts/s** for H2.
+
+To ensure maximum flexibility and future extensibility, the **Facade pattern** is used, simplifying interaction with application modules and enabling easy expansion. Database migrations are managed using **Liquibase**, which allows controlled and versioned schema changes. The application is secured using **Spring Security**, controlling access to system functions. It is designed to operate in scalable, multi-instance environments, ensuring concurrency safety.
+
+---
+
+## Example JSON Requests
+
+### 1. **Search Request Example** (`@PostMapping("/search")`)
+
+```json
 {
   "criteria": [
-{"key": "numberOfPositions", "operation": "range", "value": [0,1]},
-{"key": "weight", "operation": "range", "value": [50,60]},
-{"key": "gender", "operation": "containsIgnoreCase", "value": "f"},
-{"key": "university", "operation": "containsIgnoreCase", "value": "state"},
-{"key": "name", "operation": "containsIgnoreCase", "value": "John"}
+    {"key": "numberOfPositions", "operation": "range", "value": [0, 1]},
+    {"key": "weight", "operation": "range", "value": [50, 60]},
+    {"key": "gender", "operation": "containsIgnoreCase", "value": "f"},
+    {"key": "university", "operation": "containsIgnoreCase", "value": "state"},
+    {"key": "name", "operation": "containsIgnoreCase", "value": "John"}
   ]
 }
------------------------------------------------------------------------------------
-        CreatePersonCommand:
------------------------------------------------------------------------------------
 
+### 2. **Create Person Command Example** (`@PostMapping("/createPerson")`)
+
+```json
     {
       "classType": "Employee",
       "parameters": [
@@ -63,10 +71,8 @@ Aby zapewnić maksymalną elastyczność i łatwą rozszerzalność systemu w pr
         { "name": "scholarship", "value": "2000" }
       ]
     }
------------------------------------------------------------------------------------
-        EditPersonCommand:
------------------------------------------------------------------------------------
 
+### 3. ** Edit Person Command Example** (`@PutMapping("/editPerson/{id}")`)
         {
           "id": 1,
           "classType": "Employee",
@@ -80,9 +86,8 @@ Aby zapewnić maksymalną elastyczność i łatwą rozszerzalność systemu w pr
           ],
          "version": "0"
         }
------------------------------------------------------------------------------------
-        CreatePositionCommand:
------------------------------------------------------------------------------------
+
+### 4. **Create Position Command Example** (`@PostMapping("/createPosition")`)
 
 {
         "name": "Chief Coffee Tester",
