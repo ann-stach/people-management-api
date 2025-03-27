@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="20241912_anna_001_insert_roles" author="anna">
+        <insert tableName="roles">
+            <column name="id" value="1" />
+            <column name="name" value="ROLE_ADMIN" />
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="2" />
+            <column name="name" value="ROLE_IMPORTER" />
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="3" />
+            <column name="name" value="ROLE_EMPLOYEE" />
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="20241912_anna_002_insert_users" author="anna">
+        <insert tableName="users">
+            <column name="id" value="1" />
+            <column name="name" value="admin" />
+            <column name="password" value="$2a$10$K0/ssKJ6NK7awpXh4em1xO6Y66ADenR0BgRpHlDcNUXIeWNhLa6ZC" />
+            <column name="account_locked" value="false" />
+            <column name="lock_time" value="null" />
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="2" />
+            <column name="name" value="employee" />
+            <column name="password" value="$2a$10$4/.CX6O1fCVBSCOyDT4O9.CC02YhXg/HvlfO8AU2v1k0Gus2Yz.TC" />
+            <column name="account_locked" value="false" />
+            <column name="lock_time" value="null" />
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="3" />
+            <column name="name" value="importer" />
+            <column name="password" value="$2a$10$QJE2clljrbRMU0q4rZNmpuvwsj2JrOiFOGKc3/.AIlfkcyKIYyt.O" />
+            <column name="account_locked" value="false" />
+            <column name="lock_time" value="null" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="20241912_anna_003_insert_relations" author="anna">
+        <insert tableName="users_roles">
+            <column name="user_id" value="1" />
+            <column name="role_id" value="1" />
+        </insert>
+        <insert tableName="users_roles">
+            <column name="user_id" value="2" />
+            <column name="role_id" value="3" />
+        </insert>
+        <insert tableName="users_roles">
+            <column name="user_id" value="3" />
+            <column name="role_id" value="2" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="20241912_anna_004_insert_positions" author="anna">
+        <sql>
+            INSERT INTO position (name, date_from, date_to, salary)
+            VALUES
+            ('Software Developer', '2020-12-12', NULL, 8000),
+            ('Mathematician', '2022-01-12', NULL, 10000),
+            ('Structural Engineer', '2016-12-12', '2018-12-12', 18000),
+            ('Structural Engineer', '2016-12-12', '2022-12-12', 18000),
+            ('Structural Engineer', '2024-12-12', NULL, 18000);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20241912_anna_005_insert_people" author="anna">
+        <sql>
+            INSERT INTO person (name, surname, pesel, height, weight, email, dtype, version, current_Position)
+            VALUES
+            ('John', 'Doe', '92071638970', 180, 75, 'john.doe@example.com', 'Employee', 0, 'NOT_EMPLOYED'),
+            ('Jane', 'Smith', '88122081761', 165, 60, 'jane.smith@example.com', 'Employee', 0, 'NOT_EMPLOYED'),
+            ('Mike', 'Brown', '81121954852', 175, 80, 'mike.brown@example.com', 'Employee', 0, 'NOT_EMPLOYED');
+
+            INSERT INTO person (name, surname, pesel, height, weight, email, university, academic_year, course, scholarship, dtype, version)
+            VALUES
+            ('Alice', 'Johnson', '03022415151', 170, 65, 'alice.johnson@example.com', 'University of Example', 2, 'Computer Science', 1500, 'Student', 0),
+            ('Bob', 'Williams', '20282211978', 180, 70, 'bob.williams@example.com', 'Tech Institute', 3, 'Mechanical Engineering', 2000, 'Student', 0),
+            ('Carol', 'Davis', '09021158257', 160, 55, 'carol.davis@example.com', 'State University', 1, 'Mathematics', 1200, 'Student', 0);
+
+            INSERT INTO person (name, surname, pesel, height, weight, email, pension, years_worked, dtype, version)
+            VALUES
+            ('Edward', 'Thomas', '32053199020', 175, 70, 'edward.thomas@example.com', 2500, 40, 'Retiree', 0),
+            ('Fiona', 'Harris', '38072645489', 165, 60, 'fiona.harris@example.com', 2200, 35, 'Retiree', 0),
+            ('George', 'Martin', '65080999792', 180, 75, 'george.martin@example.com', 3000, 45, 'Retiree', 0);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20241912_anna_006_assign_positions_to_employees" author="anna">
+        <sql>
+            UPDATE person
+            SET current_position = 'Software Developer',
+            employed_from = '2020-12-12',
+            current_salary = 8000,
+            version = 2
+            WHERE id = 1;
+
+            update position
+            set employee_id = 1
+            where id = 1;
+
+            update position
+            set employee_id = 1
+            where id = 3;
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="20250120_anna_007_import-lock" author="anna">
+        <sql>
+            INSERT INTO distributed_lock (lock_key, active_imports, max_imports)
+            VALUES ('import-lock', 0, 1);
+
+        </sql>
+    </changeSet>
+
+
+
+</databaseChangeLog>
