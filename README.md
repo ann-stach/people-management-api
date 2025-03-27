@@ -17,16 +17,17 @@ To ensure maximum flexibility and future extensibility, the **Facade pattern** i
 ### 1. **Search Request Example** (`@PostMapping("/search")`)
 
 ```json
-{
-  "criteria": [
-    {"key": "numberOfPositions", "operation": "range", "value": [0, 1]},
-    {"key": "weight", "operation": "range", "value": [50, 60]},
-    {"key": "gender", "operation": "containsIgnoreCase", "value": "f"},
-    {"key": "university", "operation": "containsIgnoreCase", "value": "state"},
-    {"key": "name", "operation": "containsIgnoreCase", "value": "John"}
-  ]
-}
+    {
+      "criteria": [
+        {"key": "numberOfPositions", "operation": "range", "value": [0, 1]},
+        {"key": "weight", "operation": "range", "value": [50, 60]},
+        {"key": "gender", "operation": "containsIgnoreCase", "value": "f"},
+        {"key": "university", "operation": "containsIgnoreCase", "value": "state"},
+        {"key": "name", "operation": "containsIgnoreCase", "value": "John"}
+      ]
+    }
 
+```
 ### 2. **Create Person Command Example** (`@PostMapping("/createPerson")`)
 
 ```json
@@ -41,7 +42,9 @@ To ensure maximum flexibility and future extensibility, the **Facade pattern** i
         { "name": "email", "value": "john.doe@example.com" }
       ]
     }
+```
 
+```json
     {
       "classType": "Retiree",
       "parameters": [
@@ -55,7 +58,9 @@ To ensure maximum flexibility and future extensibility, the **Facade pattern** i
         { "name": "yearsWorked", "value": "40" }
       ]
     }
+```
 
+```json
     {
       "classType": "Student",
       "parameters": [
@@ -71,8 +76,10 @@ To ensure maximum flexibility and future extensibility, the **Facade pattern** i
         { "name": "scholarship", "value": "2000" }
       ]
     }
-
+```
 ### 3. ** Edit Person Command Example** (`@PutMapping("/editPerson/{id}")`)
+
+```json
         {
           "id": 1,
           "classType": "Employee",
@@ -86,12 +93,15 @@ To ensure maximum flexibility and future extensibility, the **Facade pattern** i
           ],
          "version": "0"
         }
+```
 
 ### 4. **Create Position Command Example** (`@PostMapping("/createPosition")`)
 
-{
+```json
+      {
         "name": "Chief Coffee Tester",
         "dateFrom": "2024-06-01",
         "dateTo": null,
         "salary": 1000000
         }
+```
